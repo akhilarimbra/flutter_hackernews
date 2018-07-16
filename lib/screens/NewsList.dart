@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import '../blocs/StoriesProvider.dart';
+import '../widgets/NewListTile.dart';
 
-class NewsList extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return NewsListState();
-  }
-}
-
-class NewsListState extends State<NewsList> {
+class NewsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _bloc = StoriesProvider.of(context);
@@ -36,7 +30,11 @@ class NewsListState extends State<NewsList> {
         return ListView.builder(
           itemCount: snapshot.data.length,
           itemBuilder: (context, int index) {
-            return Text('${snapshot.data[index]}');
+            return Card(
+              child: NewsListTitle(
+                itemId: snapshot.data[index],
+              ),
+            );
           },
         );
       },
