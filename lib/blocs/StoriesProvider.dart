@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import './StoriesBloc.dart';
-export './StoriesBloc.dart';
+
+import 'StoriesBloc.dart';
+
+export 'StoriesBloc.dart';
 
 class StoriesProvider extends InheritedWidget {
   final StoriesBloc bloc;
@@ -9,8 +11,7 @@ class StoriesProvider extends InheritedWidget {
       : bloc = StoriesBloc(),
         super(key: key, child: child);
 
-  @override
-  bool updateShouldNotify(InheritedWidget oldWidget) => true;
+  bool updateShouldNotify(_) => true;
 
   static StoriesBloc of(BuildContext context) {
     return (context.inheritFromWidgetOfExactType(StoriesProvider)

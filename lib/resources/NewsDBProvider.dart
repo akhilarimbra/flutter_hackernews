@@ -1,29 +1,35 @@
-import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import 'dart:async';
+import 'dart:io';
+
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+
+import './Repository.dart';
 import '../models/Item.dart';
-import '../resources/Repository.dart';
 
-final String _table = 'items';
+class NewsDbProvider implements Source, Cache {
+  Database db;
 
-class NewsDBProvider implements Source, Cache {
-  Database database;
-
-  NewsDBProvider() {
+  NewsDbProvider() {
     init();
   }
 
+  // Todo - store and fetch top ids
+  Future<List<int>> fetchTopIds() {
+    return null;
+  }
+
   void init() async {
-    Directory documentDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentDirectory.path, 'items.db');
-    database = await openDatabase(
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    final path = join(documentsDirectory.path, "items7.db");
+    db = await openDatabase(
       path,
       version: 1,
-      onCreate: (Database newDatabase, int version) {
-        newDatabase.execute("""
-            CREATE TABLE $_table(
+      onCreate: (Database newDb, int version) {
+        newDb.execute("""
+          CREATE TABLE Items
+            (
               id INTEGER PRIMARY KEY,
               type TEXT,
               by TEXT,
@@ -38,32 +44,35 @@ class NewsDBProvider implements Source, Cache {
               title TEXT,
               descendants INTEGER
             )
-          """);
+        """);
       },
     );
   }
 
-  Future<List<int>> fetchTopIds() =>
-      null; // To fix abstract class Source params
-
   Future<ItemModel> fetchItem(int id) async {
-    final maps = await database.query(
-      _table,
+    final maps = await db.query(
+      "Items",
       columns: null,
       where: "id = ?",
       whereArgs: [id],
     );
 
     if (maps.length > 0) {
-      return ItemModel.fromDatabase(maps.first);
+      return ItemModel.fromDb(maps.first);
     }
 
     return null;
   }
 
   Future<int> addItem(ItemModel item) {
-    return database.insert(_table, item.toMapDatabase());
+    return db.insert(
+      "Items",
+      item.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
   }
+
+  Future<int> clear() => db.delete('Items');
 }
 
-final newsDBProvider = NewsDBProvider();
+final newsDbProvider = NewsDbProvider();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/NewsList.dart';
-import 'blocs/StoriesProvider.dart';
+
+import './blocs/StoriesProvider.dart';
+import './screens/NewsList.dart';
 
 class App extends StatelessWidget {
   @override

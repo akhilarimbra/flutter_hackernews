@@ -17,35 +17,35 @@ class ItemModel {
 
   ItemModel.fromJson(Map<String, dynamic> parsedJson)
       : id = parsedJson['id'],
-        deleted = parsedJson['deleted'],
+        deleted = parsedJson['deleted'] ?? false,
+        type = parsedJson['type'],
+        by = parsedJson['by'] ?? '',
+        time = parsedJson['time'],
+        text = parsedJson['text'] ?? '',
+        dead = parsedJson['dead'] ?? false,
+        parent = parsedJson['parent'],
+        kids = parsedJson['kids'] ?? [],
+        url = parsedJson['url'],
+        score = parsedJson['score'],
+        title = parsedJson['title'],
+        descendants = parsedJson['descendants'] ?? 0;
+
+  ItemModel.fromDb(Map<String, dynamic> parsedJson)
+      : id = parsedJson['id'],
+        deleted = parsedJson['deleted'] == 1,
         type = parsedJson['type'],
         by = parsedJson['by'],
         time = parsedJson['time'],
         text = parsedJson['text'],
-        dead = parsedJson['dead'],
+        dead = parsedJson['dead'] == 1,
         parent = parsedJson['parent'],
-        kids = parsedJson['kids'],
+        kids = jsonDecode(parsedJson['kids']),
         url = parsedJson['url'],
         score = parsedJson['score'],
         title = parsedJson['title'],
         descendants = parsedJson['descendants'];
 
-  ItemModel.fromDatabase(Map<String, dynamic> parsedDatabase)
-      : id = parsedDatabase['id'],
-        deleted = parsedDatabase['deleted'] == 1,
-        type = parsedDatabase['type'],
-        by = parsedDatabase['by'],
-        time = parsedDatabase['time'],
-        text = parsedDatabase['text'],
-        dead = parsedDatabase['dead'] == 1,
-        parent = parsedDatabase['parent'],
-        kids = jsonDecode(parsedDatabase['kids']),
-        url = parsedDatabase['url'],
-        score = parsedDatabase['score'],
-        title = parsedDatabase['title'],
-        descendants = parsedDatabase['descendants'];
-
-  Map<String, dynamic> toMapDatabase() {
+  Map<String, dynamic> toMap() {
     return <String, dynamic>{
       "id": id,
       "type": type,
