@@ -10,7 +10,9 @@ class App extends StatelessWidget {
       child: MaterialApp(
         title: 'HackerNews',
         home: NewsList(),
-        theme: ThemeData.dark(),
+        theme: ThemeData(
+          primarySwatch: Colors.deepOrange,
+        ),
       ),
     );
   }
